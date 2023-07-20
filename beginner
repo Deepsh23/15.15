@@ -1,0 +1,74 @@
+class RubiksCube:
+    def __init__(self):
+        # Initialize the solved state of the cube
+        self.cube = [['W']*3 for _ in range(3)]
+        self.cube.extend([['G']*3 for _ in range(3)])
+        self.cube.extend([['Y']*3 for _ in range(3)])
+        self.cube.extend([['B']*3 for _ in range(3)])
+        self.cube.extend([['R']*3 for _ in range(3)])
+        self.cube.extend([['O']*3 for _ in range(3)])
+
+    def rotate_face_clockwise(self, face):
+        # Rotate a face clockwise
+        face_copy = [row[:] for row in self.cube[face]]
+        for i in range(3):
+            for j in range(3):
+                self.cube[face][i][j] = face_copy[2-j][i]
+
+    def rotate_face_counter_clockwise(self, face):
+        # Rotate a face counter-clockwise
+        face_copy = [row[:] for row in self.cube[face]]
+        for i in range(3):
+            for j in range(3):
+                self.cube[face][i][j] = face_copy[j][2-i]
+
+    def rotate_row_left(self, row):
+        # Rotate a row left
+        row_copy = self.cube[row][0][:]
+        for i in range(2):
+            self.cube[row][i] = self.cube[row][i+1]
+        self.cube[row][2] = row_copy
+
+    def rotate_row_right(self, row):
+        # Rotate a row right
+        row_copy = self.cube[row][2][:]
+        for i in range(2, 0, -1):
+            self.cube[row][i] = self.cube[row][i-1]
+        self.cube[row][0] = row_copy
+
+    def rotate_column_up(self, column):
+        # Rotate a column up
+        column_copy = [self.cube[i][column] for i in range(3)]
+        for i in range(2):
+            self.cube[i][column] = column_copy[i+1]
+        self.cube[2][column] = column_copy[0]
+
+    def rotate_column_down(self, column):
+        # Rotate a column down
+        column_copy = [self.cube[i][column] for i in range(3)]
+        for i in range(2, 0, -1):
+            self.cube[i][column] = column_copy[i-1]
+        self.cube[0][column] = column_copy[2]
+
+    def display(self):
+        # Display the current state of the cube
+        for face in self.cube:
+            print(" ".join(face))
+        print()
+
+    def solve_cube(self):
+        # Solves the Rubik's Cube layer-by-layer
+        # You can customize the sequence of moves to solve the cube here
+        self.display()
+        print("Solving Rubik's Cube...")
+        self.rotate_face_clockwise(0)  # Rotate the top face clockwise
+        self.rotate_row_left(2)       # Rotate the bottom row left
+        self.rotate_face_counter_clockwise(1)  # Rotate the middle face counter-clockwise
+        self.rotate_column_down(2)    # Rotate the right column down
+        self.display()
+        print("Rubik's Cube solved!")
+
+
+if __name__ == "__main__":
+    rubiks_cube = RubiksCube()
+    rubiks_cube.solve_cube()
